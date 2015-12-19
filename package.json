@@ -1,0 +1,27 @@
+{
+  "name": "number-to-text",
+  "version": "0.0.1",
+  "description": "A number to text converter",
+  "main": "index.js",
+  "scripts": {
+    "test": "node node_modules/mocha/bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Maheshkumar-Kakade/number-to-text.git"
+  },
+  "keywords": [
+    "number",
+    "text",
+    "conversion",
+    "n2t",
+    "num2text",
+    "convert"
+  ],
+  "author": "Maheshkumar Kakade",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Maheshkumar-Kakade/number-to-text/issues"
+  },
+  "homepage": "https://github.com/Maheshkumar-Kakade/number-to-text#readme"
+}

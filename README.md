@@ -37,6 +37,28 @@ numberToText.convertToText("12346")
   - `separator` - Default: `,`
   - `case` - Default: `titleCase` - possibleValues : `"titleCase" , "lowerCase" , "upperCase"`
 
+**Examples**
+
+```js
+var numberToText = require('number-to-text');
+
+numberToText.convertToText('123456')  
+//One Hundred Twenty Three Thousand, Four Hundred Fifty Six
+
+numberToText.convertToText(123456) 
+//One Hundred Twenty Three Thousand, Four Hundred Fifty Six
+
+numberToText.convertToText(123456,{case:"lowerCase"}) 
+//one hundred twenty three thousand, four hundred fifty six
+
+numberToText.convertToText(123456,{case:"upperCase"}) 
+//ONE HUNDRED TWENTY THREE THOUSAND, FOUR HUNDRED FIFTY SIX
+
+numberToText.convertToText('123456',{separator : '', case:"upperCase"}) 
+//ONE HUNDRED TWENTY THREE THOUSAND FOUR HUNDRED FIFTY SIX
+
+```
+
 ## Tests
 
 ```js

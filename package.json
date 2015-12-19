@@ -10,6 +10,16 @@
     "type": "git",
     "url": "https://github.com/Maheshkumar-Kakade/number-to-text.git"
   },
+  "bugs": {
+    "url": "https://github.com/Maheshkumar-Kakade/number-to-text/issues"
+  },
+  "homepage": "https://github.com/Maheshkumar-Kakade/number-to-text#readme",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/Maheshkumar-Kakade/number-to-text/LICENSE"
+    }
+  ],
   "keywords": [
     "number",
     "text",
@@ -18,10 +28,10 @@
     "num2text",
     "convert"
   ],
-  "author": "Maheshkumar Kakade",
+  "author": "Maheshkumar Kakade <maheshkumarkakade@gmail.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Maheshkumar-Kakade/number-to-text/issues"
-  },
-  "homepage": "https://github.com/Maheshkumar-Kakade/number-to-text#readme"
+  "devDependencies": {
+    "mocha": "^2.3.3",
+    "should": "^7.1.1"
+  }
 }

@@ -1,0 +1,30 @@
+{
+    "name": "number-to-text",
+    "description": "A number to text converter",
+    "main": "dist/number-to-text.min.js",
+    "authors": [
+        "Maheshkumar Kakade <maheshkumarkakade@gmail.com>"
+    ],
+    "license": "MIT",
+    "keywords": [
+        "number",
+        "text",
+        "conversion",
+        "n2t",
+        "num2text",
+        "convert"
+    ],
+    "homepage": "https://github.com/Maheshkumar-Kakade/number-to-text",
+    "moduleType": [
+        "amd",
+        "globals"
+    ],
+    "ignore": [
+        "/*",
+        "node_modules",
+        "bower_components",
+        "test/*.js",
+        "tests",
+        "typings"
+    ]
+}

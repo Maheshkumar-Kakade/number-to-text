@@ -1,4 +1,3 @@
-
 var numberToText = require('../index');
 require('should');
 describe("number conversion",function() {
@@ -71,6 +70,13 @@ describe("number conversion",function() {
 		numberToText.convertToText(50005).should.equal("Fifty Thousand, Five");
 		done();
 	});
+    
+    it("should convert 512345678 to Five Hundered Twelve Million, Three Hundred Fourty Five Thousand, Six Hundred Seventy Eight",function(done){
+		numberToText.convertToText("512345678").should.equal("Five Hundred Twelve Million, Three Hundred Fourty Five Thousand, Six Hundred Seventy Eight");
+		numberToText.convertToText(512345678).should.equal("Five Hundred Twelve Million, Three Hundred Fourty Five Thousand, Six Hundred Seventy Eight");
+		done();
+	});
 	
+    
 	
 });

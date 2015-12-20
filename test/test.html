@@ -1,0 +1,34 @@
+<html>
+<head>
+    <script src="../dist/number-to-text.js"></script>
+    <script >
+        window.onload = function(){
+            document.getElementById("convert").onclick = function(){
+                var val = document.getElementById("numberField").value;
+                document.getElementById("result").innerText = numberToText.convertToText(val); 
+            }
+        }
+     </script>
+     <style>
+         span {
+           display: inline-block;
+           width: 100px;
+           text-align: right;  
+         } 
+         span::after {
+             content: '\00a0'
+         }
+         textarea {
+             width: 500px;
+             height: 100px;
+         }
+     </style>   
+</head>
+<body>
+    <div>
+    <span>Number</span><input type="number" aria-label="Enter Number" id="numberField"></br> <br>
+    <span>Text</span><textarea id="result" readonly> </textarea> </br> <br>
+    <span></span><button id="convert" name="convert" value="convert">Convert</button>
+    <div>
+</body>
+</html>

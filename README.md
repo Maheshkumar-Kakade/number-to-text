@@ -12,19 +12,35 @@
 
 ## Install
 
+### npm package
 ```bash
 npm install number-to-text --save
 ```
+### bower package
+
+```bash
+bower install number-to-text --save
+```
+
 ## Usage
 
-```js
+### node
 
+```js
 var numberToText = require('number-to-text')
 
 numberToText.convertToText(12346)
 
 numberToText.convertToText("12346")
+```
 
+###bower
+```html
+<script src="bower_components/dist/number-to-text.js"></script>
+<!-- creates numberToText object on window -->
+<script>
+    console.log(numberToText.convertToText(123456));
+</script>
 ```
 
 ### convertToText(num, options)

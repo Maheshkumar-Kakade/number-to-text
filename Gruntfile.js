@@ -14,7 +14,7 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
         watch: {
             js: {
-                files: watchFiles.clientJS,
+                files: watchFiles.serverJS,
                 tasks: ['browserify'],
                 options: {
                     livereload: true
@@ -23,7 +23,7 @@ module.exports = function (grunt) {
         },
         browserify: {
             standalone: {
-                src: ['index.js'],
+                src: ['index.js','./converters/en-us.js', './converters/en-in.js'],
                 dest: './dist/<%= pkg.name %>.js',
                 options: {
                     browserifyOptions: {

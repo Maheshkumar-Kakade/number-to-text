@@ -5,6 +5,7 @@
 [![Build Status][travis-ci-img]][travis-ci-url] 
 [![npm version][npm-version-img]][npm-version-url] 
 
+[![NPM](https://nodei.co/npm/number-to-text.png?downloadRank=true&downloads=true)](https://nodei.co/npm/number-to-text/)
 ## Index
 * [Install](#install)
 * [Usage](#usage)
@@ -34,7 +35,7 @@ numberToText.convertToText(12346)
 numberToText.convertToText("12346")
 ```
 
-###bower
+### bower
 ```html
 <script src="bower_components/dist/number-to-text.js"></script>
 <!-- creates numberToText object on window -->
@@ -49,7 +50,7 @@ numberToText.convertToText("12346")
 
 * `num` - a string or number.
 * `options` 
-  - `language` - Default: `en-us` - possibleValues : `en-us`
+  - `language` - Default: `en-us` - possibleValues : `en-us`, 'en-in'
   - `separator` - Default: `,`
   - `case` - Default: `titleCase` - possibleValues : `"titleCase" , "lowerCase" , "upperCase"`
 
@@ -74,7 +75,32 @@ numberToText.convertToText('123456',{separator : '', case:"upperCase"})
 //ONE HUNDRED TWENTY THREE THOUSAND FOUR HUNDRED FIFTY SIX
 
 ```
+### addConverter(language, langConverter)
+function is used to implement your own language converter.
 
+**Arguments**
+
+* `language` - a language code.
+* `langConverter` - an object inehrited from  numberToText.Converter
+
+**writing own language converter**
+```js
+var numberToText = require('numberToText');
+var util = require('util');
+
+function en_customConverter() { // use language code as converter prefix
+    numberToText.addConverter(""/*enter language name here*/, this);
+}
+
+util.inherits(en_customConverter, numberToText.Converter);
+
+
+en_customConverter.prototype.convertToText = function (num, options) {
+    /* Implement number to text conversion logic */
+}
+
+module.exports = new en_customConverter()
+```   
 ## Tests
 
 ```js

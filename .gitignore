@@ -42,6 +42,7 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+/.vscode/
 /node_modules/
 /typings/
 npm-debug.log

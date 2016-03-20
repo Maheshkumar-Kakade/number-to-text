@@ -6,3 +6,4 @@ typings/
 .travis.yml
 dist/
 Gruntfile.js
+.vscode/

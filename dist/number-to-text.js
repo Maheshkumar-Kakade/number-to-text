@@ -5,6 +5,113 @@
 var numberToText = require('../index');
 var util = require('util');
 
+var thousands = ["", "tausend", "Million", "Milliarde", "Billion", "Billiarde", "Trillion"];
+var thousandsPural = ["", "tausend", "Millionen", "Milliarden", "Billionen", "Billiarden", "Trillionen"];
+var ones = ["", "ein", "zwei", "drei", "vier", "fünf", "sechs", "sieben", "acht", "neun", "zehn", "elf", "zwölf", "dreizehn", "vierzehn", "fünfzehn", "sechzehn", "siebzehn", "achtzehn", "neunzehn"];
+var tens = ["", "", "zwanzig", "dreißig", "vierzig", "fünfzig", "sechzig", "siebzig", "achtzig", "neunzig"];
+var cases = ["titleCase", "lowerCase", "upperCase", "toString"]
+var caseFunctions = [String.prototype.toString, String.prototype.toLowerCase, String.prototype.toUpperCase, String.prototype.toString];
+
+/**
+ *  convert number to text
+ *  @param num string or number
+ *  @param options { language : "de" ,separator :"" ,case : "titleCase" } current support language is en-us and cases are "titleCase" , "lowerCase" , "upperCase". default is { language : "en-us" ,separator :"," ,case : "titleCase" }
+ */
+function deConverter() {
+    numberToText.addConverter("de", this);
+}
+
+util.inherits(deConverter, numberToText.Converter);
+
+
+deConverter.prototype.convertToText = function(num, options) {
+    var options = options || {};
+    if (options.separator !== '')
+        options.separator = options.separator || "";
+    if (cases.indexOf(options.case) === -1) {
+        options.case = cases[3];
+    }
+    var caseFunction = caseFunctions[cases.indexOf(options.case)];
+
+    var valueArray = [];
+    if (typeof num === "number" || num instanceof Number) {
+        num = num.toString();
+    }
+    if (num === "0") {
+        return caseFunction.call("null");
+    }
+    var hasThousand = false;
+    var splittedNumbers = num.match(/.{1,}(?=(...){5}(...)$)|.{1,3}(?=(...){0,5}$)|.{1,3}$/g);
+    for (var index = 0; index < splittedNumbers.length; ++index) {
+        var splitValues = [];
+        var splitNum = splittedNumbers[index];
+        if (splitNum.length > 3) {
+            splitValues.push(module.exports.convertToText(splitNum));
+        } else {
+            var hnum = "";
+            if (splitNum.length === 3 && ones[splitNum.charAt(0)]) {
+                hnum += ones[splitNum.charAt(0)] + 'hundert';
+            } if (splitNum.length >= 2) {
+                if (splitNum.substr(-2, 1) === '1') {
+                    hnum += ones[splitNum.substr(-2, 2)];
+                } else {
+                    if (ones[splitNum.substr(-1, 1)]) {
+                        hnum += ones[splitNum.substr(-1, 1)];
+                    }
+                    if (tens[splitNum.substr(-2, 1)]) {
+                        hnum += ones[splitNum.substr(-1, 1)] ? "und" : "";
+                        hnum += tens[splitNum.substr(-2, 1)];
+                    } /*else {
+                        hnum += ones[splitNum.substr(-1, 1)] == ones[1] ? "s" : "";
+                    }*/
+                }
+            } else {
+                hnum += ones[splitNum.charAt(0)] /*== ones[1] ? ones[1] + "s" : ones[splitNum.charAt(0)]*/;
+            }
+            if (hnum) {
+                if (new RegExp(ones[1] + "$").test(hnum))
+                    hnum += "s";
+                splitValues.push(hnum);
+            }
+        }
+        if (thousands[splittedNumbers.length - 1 - index] && splitValues.length > 0) {
+            if ((splittedNumbers.length - 1 - index) == 1) {
+                var val = splitValues.pop();
+                if (val === (ones[1] + "s"))
+                    val = ones[1];
+                val += thousands[splittedNumbers.length - 1 - index];
+                splitValues.push(val);
+                hasThousand = true;
+            } else {
+                var val = splitValues.pop();
+                if (val === (ones[1] + "s"))
+                    val = ones[1] + "e";
+                splitValues.push(val);
+                if (val === ones[1] + "e")
+                    splitValues.push(thousands[splittedNumbers.length - 1 - index]);
+                else
+                    splitValues.push(thousandsPural[splittedNumbers.length - 1 - index]);
+            }
+        }
+        if (splitValues.length > 0) {
+            if (hasThousand && valueArray.length > 0 && (splittedNumbers.length - 1 - index) != 1) {
+                valueArray.push(valueArray.pop() + splitValues.join(' '));
+            } else {
+                valueArray.push(splitValues.join(' '));
+            }
+        }
+    }
+    return caseFunction.call((valueArray.join(options.separator + ' ')));
+}
+
+module.exports = new deConverter()
+},{"../index":4,"util":9}],2:[function(require,module,exports){
+/** 
+ * Convert the number to text
+*/
+var numberToText = require('../index');
+var util = require('util');
+
 //var thousands = ["", "Thousand"]
 var hundreds = ["", "Thousand", "Lakh", "Crore"];
 var ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eightteen", "Nineteen"];
@@ -71,7 +178,7 @@ en_inConverter.prototype.convertToText = function (num, options) {
 }
 
 module.exports = new en_inConverter()
-},{"../index":3,"util":8}],2:[function(require,module,exports){
+},{"../index":4,"util":9}],3:[function(require,module,exports){
 /** 
  * Convert the number to text
 */
@@ -97,6 +204,7 @@ util.inherits(en_usConverter, numberToText.Converter);
 
 
 en_usConverter.prototype.convertToText = function (num, options) {
+    var options = options || {};
     if (options.separator !== '')
         options.separator = options.separator || ",";
     if (cases.indexOf(options.case) === -1) {
@@ -111,7 +219,7 @@ en_usConverter.prototype.convertToText = function (num, options) {
     if (num === "0") {
         return "Zero";
     }
-    var splittedNumbers = num.match(/.{1,3}(?=(...)+$)|.{1,3}$/g);
+    var splittedNumbers = num.match(/.{1,}(?=(...){5}(...)$)|.{1,3}(?=(...){0,5}$)|.{1,3}$/g);
     for (var index = 0; index < splittedNumbers.length; ++index) {
         var splitValues = [];
         var splitNum = splittedNumbers[index];
@@ -143,30 +251,26 @@ en_usConverter.prototype.convertToText = function (num, options) {
 }
 
 module.exports = new en_usConverter()
-},{"../index":3,"util":8}],3:[function(require,module,exports){
-
-/** 
- * Convert the number to text
-*/
-/**
- *  convert number to text
- *  @param num string or number
- *  @param options { language : "en-us" ,separator :"," ,case : "titleCase" } current support language is en-us and cases are "titleCase" , "lowerCase" , "upperCase". default is { language : "en-us" ,separator :"," ,case : "titleCase" }
- */
+},{"../index":4,"util":9}],4:[function(require,module,exports){
 var converter = require('./lib/converter');
 var container = {};
 module.exports = {
-    convertToText: function (num, options) {
+    /**
+    *  convert number to text
+    *  @param {string or number} num
+    *  @param {object } options { language : "en-us" ,separator :"," ,case : "titleCase" } current support language is en-us and cases are "titleCase" , "lowerCase" , "upperCase". default is { language : "en-us" ,separator :"," ,case : "titleCase" }
+    */
+    convertToText: function(num, options) {
         options = options || {};
         var language = (options.language || "en-us").toLowerCase();
         if (container.hasOwnProperty(language)) {
-            return container[language].convertToText(num,options);
-        }else {
-           throw new Error('converter for language "' + language + '" not found.')
+            return container[language].convertToText(num, options);
+        } else {
+            throw new Error('converter for language "' + language + '" not found.')
         }
     },
 
-    addConverter: function (language, langConverter) {
+    addConverter: function(language, langConverter) {
         if (!container.hasOwnProperty(language)) {
             if (langConverter instanceof converter) {
                 container[language] = langConverter;
@@ -180,7 +284,7 @@ module.exports = {
     Converter: converter
 }
 
-},{"./lib/converter":4}],4:[function(require,module,exports){
+},{"./lib/converter":5}],5:[function(require,module,exports){
 var converter =  module.exports = function () {
     
 }
@@ -188,7 +292,7 @@ var converter =  module.exports = function () {
 converter.prototype.convertToText = function (options) {
         new Error("convertToText is not implemented by " + this.constructor.name  + " ." );
 }
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -213,7 +317,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -306,14 +410,14 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -903,5 +1007,5 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":7,"_process":6,"inherits":5}]},{},[3,2,1])(3)
+},{"./support/isBuffer":8,"_process":7,"inherits":6}]},{},[4,3,2,1])(4)
 });

@@ -25,6 +25,8 @@
         "bower_components",
         "test/*.js",
         "tests",
-        "typings"
+        "typings",
+        "converters",
+        "lib"
     ]
 }

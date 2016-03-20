@@ -5,7 +5,9 @@
         window.onload = function(){
             document.getElementById("convert").onclick = function(){
                 var val = document.getElementById("numberField").value;
-                document.getElementById("result").innerText = numberToText.convertToText(val); 
+                var language = document.getElementById("languageField").value;
+                document.getElementById("len").textContent = val.length;
+                document.getElementById("result").innerText = numberToText.convertToText(val,{"language" : language}); 
             }
         }
      </script>
@@ -26,7 +28,13 @@
 </head>
 <body>
     <div>
-    <span>Number</span><input type="number" aria-label="Enter Number" id="numberField"></br> <br>
+    <span>Number</span><input type="number" aria-label="Enter Number" id="numberField" style="width: 200px"><span id="len" style="width=20px"></span>    
+    <span>Language</span><select id="languageField">
+  <option value="en-us" selected>US English</option>
+  <option value="en-in">Indian English</option>
+  <option value="de">German</option>
+</select>
+    </br> <br>
     <span>Text</span><textarea id="result" readonly> </textarea> </br> <br>
     <span></span><button id="convert" name="convert" value="convert">Convert</button>
     <div>

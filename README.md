@@ -50,9 +50,9 @@ numberToText.convertToText("12346")
 
 * `num` - a string or number.
 * `options` 
-  - `language` - Default: `en-us` - possibleValues : `en-us`, 'en-in'
-  - `separator` - Default: `,`
-  - `case` - Default: `titleCase` - possibleValues : `"titleCase" , "lowerCase" , "upperCase"`
+  - `language` - Default: `en-us` - possibleValues : `en-us`, 'en-in' , 'de'
+  - `separator` - Default: `,` for (en-us and en-in)
+  - `case` - Default: `titleCase` - possibleValues : `"titleCase" , "lowerCase" , "upperCase"` for (en-us and en-in)
 
 **Examples**
 

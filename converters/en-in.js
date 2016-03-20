@@ -1,29 +1,19 @@
-/** 
- * Convert the number to text
-*/
 var numberToText = require('../index');
 var util = require('util');
 
-//var thousands = ["", "Thousand"]
 var hundreds = ["", "Thousand", "Lakh", "Crore"];
 var ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eightteen", "Nineteen"];
 var tens = ["", "", "Twenty", "Thirty", "Fourty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
 var cases = ["titleCase", "lowerCase", "upperCase"]
 var caseFunctions = [String.prototype.toString, String.prototype.toLowerCase, String.prototype.toUpperCase];
 
-/**
- *  convert number to text
- *  @param num string or number
- *  @param options { language : "en-us" ,separator :"," ,case : "titleCase" } current support language is en-us and cases are "titleCase" , "lowerCase" , "upperCase". default is { language : "en-us" ,separator :"," ,case : "titleCase" }
- */
 function en_inConverter() {
     numberToText.addConverter("en-in", this);
 }
 
 util.inherits(en_inConverter, numberToText.Converter);
 
-
-en_inConverter.prototype.convertToText = function (num, options) {
+en_inConverter.prototype.convertToText = function(num, options) {
     if (options.separator !== '')
         options.separator = options.separator || ",";
     if (cases.indexOf(options.case) === -1) {

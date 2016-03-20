@@ -1,20 +1,12 @@
-/** 
- * Convert the number to text
-*/
 var numberToText = require('../index');
 var util = require('util');
 
-var thousands = ["", "Thousand", "Million", "Billion", "Trillion", "Quadrillion", "Quintillion "];
+var thousands = ["", "Thousand", "Million", "Billion", "Trillion", "Quadrillion", "Quintillion"];
 var ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eightteen", "Nineteen"];
 var tens = ["", "", "Twenty", "Thirty", "Fourty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
 var cases = ["titleCase", "lowerCase", "upperCase"]
 var caseFunctions = [String.prototype.toString, String.prototype.toLowerCase, String.prototype.toUpperCase];
 
-/**
- *  convert number to text
- *  @param num string or number
- *  @param options { language : "en-us" ,separator :"," ,case : "titleCase" } current support language is en-us and cases are "titleCase" , "lowerCase" , "upperCase". default is { language : "en-us" ,separator :"," ,case : "titleCase" }
- */
 function en_usConverter() {
     numberToText.addConverter("en-us", this);
 }
@@ -22,7 +14,8 @@ function en_usConverter() {
 util.inherits(en_usConverter, numberToText.Converter);
 
 
-en_usConverter.prototype.convertToText = function (num, options) {
+en_usConverter.prototype.convertToText = function(num, options) {
+    var options = options || {};
     if (options.separator !== '')
         options.separator = options.separator || ",";
     if (cases.indexOf(options.case) === -1) {
@@ -37,7 +30,7 @@ en_usConverter.prototype.convertToText = function (num, options) {
     if (num === "0") {
         return "Zero";
     }
-    var splittedNumbers = num.match(/.{1,3}(?=(...)+$)|.{1,3}$/g);
+    var splittedNumbers = num.match(/.{1,}(?=(...){5}(...)$)|.{1,3}(?=(...){0,5}$)|.{1,3}$/g);
     for (var index = 0; index < splittedNumbers.length; ++index) {
         var splitValues = [];
         var splitNum = splittedNumbers[index];

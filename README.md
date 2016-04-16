@@ -1,6 +1,6 @@
 # number-to-text
 
-> `number-to-text` is a regular expression driven number to text converter (no mathematical opteration used).   
+> `number-to-text` is a regular expression driven number to text converter (no mathematical operation used). supported languages `en-us` (US English), `en-in` (Indian English), `de` (Germany)   
 
 [![Build Status][travis-ci-img]][travis-ci-url] 
 [![npm version][npm-version-img]][npm-version-url] 
@@ -29,6 +29,7 @@ bower install number-to-text --save
 
 ```js
 var numberToText = require('number-to-text')
+require('number-to-text/converters/en-us');
 
 numberToText.convertToText(12346)
 
@@ -50,14 +51,15 @@ numberToText.convertToText("12346")
 
 * `num` - a string or number.
 * `options` 
-  - `language` - Default: `en-us` - possibleValues : `en-us`, 'en-in' , 'de'
+  - `language` - Default: `en-us` - possible Values : `en-us`, 'en-in' , 'de'
   - `separator` - Default: `,` for (en-us and en-in)
-  - `case` - Default: `titleCase` - possibleValues : `"titleCase" , "lowerCase" , "upperCase"` for (en-us and en-in)
+  - `case` - Default: `titleCase` - possible Values : `"titleCase" , "lowerCase" , "upperCase"` for (en-us and en-in)
 
 **Examples**
 
 ```js
 var numberToText = require('number-to-text');
+require('number-to-text/converters/en-us'); // load converter
 
 numberToText.convertToText('123456')  
 //One Hundred Twenty Three Thousand, Four Hundred Fifty Six

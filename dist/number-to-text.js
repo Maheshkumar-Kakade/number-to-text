@@ -1,297 +1,275 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.numberToText = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/** 
- * Convert the number to text
-*/
-var numberToText = require('../index');
-var util = require('util');
+var numberToText = require('../index')
+var util = require('util')
 
-var thousands = ["", "tausend", "Million", "Milliarde", "Billion", "Billiarde", "Trillion"];
-var thousandsPural = ["", "tausend", "Millionen", "Milliarden", "Billionen", "Billiarden", "Trillionen"];
-var ones = ["", "ein", "zwei", "drei", "vier", "fünf", "sechs", "sieben", "acht", "neun", "zehn", "elf", "zwölf", "dreizehn", "vierzehn", "fünfzehn", "sechzehn", "siebzehn", "achtzehn", "neunzehn"];
-var tens = ["", "", "zwanzig", "dreißig", "vierzig", "fünfzig", "sechzig", "siebzig", "achtzig", "neunzig"];
-var cases = ["titleCase", "lowerCase", "upperCase", "toString"]
-var caseFunctions = [String.prototype.toString, String.prototype.toLowerCase, String.prototype.toUpperCase, String.prototype.toString];
+var thousands = ['', 'tausend', 'Million', 'Milliarde', 'Billion', 'Billiarde', 'Trillion']
+var thousandsPural = ['', 'tausend', 'Millionen', 'Milliarden', 'Billionen', 'Billiarden', 'Trillionen']
+var ones = ['', 'ein', 'zwei', 'drei', 'vier', 'fünf', 'sechs', 'sieben', 'acht', 'neun', 'zehn', 'elf', 'zwölf', 'dreizehn', 'vierzehn', 'fünfzehn', 'sechzehn', 'siebzehn', 'achtzehn', 'neunzehn']
+var tens = ['', '', 'zwanzig', 'dreißig', 'vierzig', 'fünfzig', 'sechzig', 'siebzig', 'achtzig', 'neunzig']
+var cases = ['titleCase', 'lowerCase', 'upperCase', 'toString']
+var caseFunctions = [String.prototype.toString, String.prototype.toLowerCase, String.prototype.toUpperCase, String.prototype.toString]
 
-/**
- *  convert number to text
- *  @param num string or number
- *  @param options { language : "de" ,separator :"" ,case : "titleCase" } current support language is en-us and cases are "titleCase" , "lowerCase" , "upperCase". default is { language : "en-us" ,separator :"," ,case : "titleCase" }
- */
-function deConverter() {
-    numberToText.addConverter("de", this);
+function DeConverter () {
+  numberToText.addConverter('de', this)
 }
 
-util.inherits(deConverter, numberToText.Converter);
+util.inherits(DeConverter, numberToText.Converter)
 
+DeConverter.prototype.convertToText = function (num, options) {
+  options = options || {}
+  if (options.separator !== '') options.separator = options.separator || ''
+  if (cases.indexOf(options.case) === -1) {
+    options.case = cases[3]
+  }
+  var caseFunction = caseFunctions[cases.indexOf(options.case)]
 
-deConverter.prototype.convertToText = function(num, options) {
-    var options = options || {};
-    if (options.separator !== '')
-        options.separator = options.separator || "";
-    if (cases.indexOf(options.case) === -1) {
-        options.case = cases[3];
-    }
-    var caseFunction = caseFunctions[cases.indexOf(options.case)];
-
-    var valueArray = [];
-    if (typeof num === "number" || num instanceof Number) {
-        num = num.toString();
-    }
-    if (num === "0") {
-        return caseFunction.call("null");
-    }
-    var hasThousand = false;
-    var splittedNumbers = num.match(/.{1,}(?=(...){5}(...)$)|.{1,3}(?=(...){0,5}$)|.{1,3}$/g);
-    for (var index = 0; index < splittedNumbers.length; ++index) {
-        var splitValues = [];
-        var splitNum = splittedNumbers[index];
-        if (splitNum.length > 3) {
-            splitValues.push(module.exports.convertToText(splitNum));
+  var valueArray = []
+  if (typeof num === 'number' || num instanceof Number) {
+    num = num.toString()
+  }
+  if (num === '0') {
+    return caseFunction.call('null')
+  }
+  var hasThousand = false
+  var splittedNumbers = num.match(/.{1,}(?=(...){5}(...)$)|.{1,3}(?=(...){0,5}$)|.{1,3}$/g)
+  for (var index = 0; index < splittedNumbers.length; ++index) {
+    var splitValues = []
+    var splitNum = splittedNumbers[index]
+    if (splitNum.length > 3) {
+      splitValues.push(module.exports.convertToText(splitNum))
+    } else {
+      var hnum = ''
+      if (splitNum.length === 3 && ones[splitNum.charAt(0)]) {
+        hnum += ones[splitNum.charAt(0)] + 'hundert'
+      } if (splitNum.length >= 2) {
+        if (splitNum.substr(-2, 1) === '1') {
+          hnum += ones[splitNum.substr(-2, 2)]
         } else {
-            var hnum = "";
-            if (splitNum.length === 3 && ones[splitNum.charAt(0)]) {
-                hnum += ones[splitNum.charAt(0)] + 'hundert';
-            } if (splitNum.length >= 2) {
-                if (splitNum.substr(-2, 1) === '1') {
-                    hnum += ones[splitNum.substr(-2, 2)];
-                } else {
-                    if (ones[splitNum.substr(-1, 1)]) {
-                        hnum += ones[splitNum.substr(-1, 1)];
-                    }
-                    if (tens[splitNum.substr(-2, 1)]) {
-                        hnum += ones[splitNum.substr(-1, 1)] ? "und" : "";
-                        hnum += tens[splitNum.substr(-2, 1)];
-                    } /*else {
-                        hnum += ones[splitNum.substr(-1, 1)] == ones[1] ? "s" : "";
+          if (ones[splitNum.substr(-1, 1)]) {
+            hnum += ones[splitNum.substr(-1, 1)]
+          }
+          if (tens[splitNum.substr(-2, 1)]) {
+            hnum += ones[splitNum.substr(-1, 1)] ? 'und' : ''
+            hnum += tens[splitNum.substr(-2, 1)]
+          } /* else {
+                        hnum += ones[splitNum.substr(-1, 1)] == ones[1] ? "s" : ""
                     }*/
-                }
-            } else {
-                hnum += ones[splitNum.charAt(0)] /*== ones[1] ? ones[1] + "s" : ones[splitNum.charAt(0)]*/;
-            }
-            if (hnum) {
-                if (new RegExp(ones[1] + "$").test(hnum))
-                    hnum += "s";
-                splitValues.push(hnum);
-            }
         }
-        if (thousands[splittedNumbers.length - 1 - index] && splitValues.length > 0) {
-            if ((splittedNumbers.length - 1 - index) == 1) {
-                var val = splitValues.pop();
-                if (val === (ones[1] + "s"))
-                    val = ones[1];
-                val += thousands[splittedNumbers.length - 1 - index];
-                splitValues.push(val);
-                hasThousand = true;
-            } else {
-                var val = splitValues.pop();
-                if (val === (ones[1] + "s"))
-                    val = ones[1] + "e";
-                splitValues.push(val);
-                if (val === ones[1] + "e")
-                    splitValues.push(thousands[splittedNumbers.length - 1 - index]);
-                else
-                    splitValues.push(thousandsPural[splittedNumbers.length - 1 - index]);
-            }
-        }
-        if (splitValues.length > 0) {
-            if (hasThousand && valueArray.length > 0 && (splittedNumbers.length - 1 - index) != 1) {
-                valueArray.push(valueArray.pop() + splitValues.join(' '));
-            } else {
-                valueArray.push(splitValues.join(' '));
-            }
-        }
+      } else {
+        hnum += ones[splitNum.charAt(0)] /* == ones[1] ? ones[1] + "s" : ones[splitNum.charAt(0)] */
+      }
+      if (hnum) {
+        if (new RegExp(ones[1] + '$').test(hnum)) hnum += 's'
+        splitValues.push(hnum)
+      }
     }
-    return caseFunction.call((valueArray.join(options.separator + ' ')));
+    if (thousands[splittedNumbers.length - 1 - index] && splitValues.length > 0) {
+      var val
+      if ((splittedNumbers.length - 1 - index) === 1) {
+        val = splitValues.pop()
+        if (val === (ones[1] + 's')) val = ones[1]
+        val += thousands[splittedNumbers.length - 1 - index]
+        splitValues.push(val)
+        hasThousand = true
+      } else {
+        val = splitValues.pop()
+        if (val === (ones[1] + 's')) val = ones[1] + 'e'
+        splitValues.push(val)
+        if (val === ones[1] + 'e') {
+          splitValues.push(thousands[splittedNumbers.length - 1 - index])
+        } else {
+          splitValues.push(thousandsPural[splittedNumbers.length - 1 - index])
+        }
+      }
+    }
+    if (splitValues.length > 0) {
+      if (hasThousand && valueArray.length > 0 && (splittedNumbers.length - 1 - index) !== 1) {
+        valueArray.push(valueArray.pop() + splitValues.join(' '))
+      } else {
+        valueArray.push(splitValues.join(' '))
+      }
+    }
+  }
+  return caseFunction.call((valueArray.join(options.separator + ' ')))
 }
 
-module.exports = new deConverter()
+module.exports = new DeConverter()
+
 },{"../index":4,"util":9}],2:[function(require,module,exports){
-/** 
- * Convert the number to text
-*/
-var numberToText = require('../index');
-var util = require('util');
+var numberToText = require('../index')
+var util = require('util')
 
-//var thousands = ["", "Thousand"]
-var hundreds = ["", "Thousand", "Lakh", "Crore"];
-var ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eightteen", "Nineteen"];
-var tens = ["", "", "Twenty", "Thirty", "Fourty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
-var cases = ["titleCase", "lowerCase", "upperCase"]
-var caseFunctions = [String.prototype.toString, String.prototype.toLowerCase, String.prototype.toUpperCase];
+var hundreds = ['', 'Thousand', 'Lakh', 'Crore']
+var ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eightteen', 'Nineteen']
+var tens = ['', '', 'Twenty', 'Thirty', 'Fourty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety']
+var cases = ['titleCase', 'lowerCase', 'upperCase']
+var caseFunctions = [String.prototype.toString, String.prototype.toLowerCase, String.prototype.toUpperCase]
 
-/**
- *  convert number to text
- *  @param num string or number
- *  @param options { language : "en-us" ,separator :"," ,case : "titleCase" } current support language is en-us and cases are "titleCase" , "lowerCase" , "upperCase". default is { language : "en-us" ,separator :"," ,case : "titleCase" }
- */
-function en_inConverter() {
-    numberToText.addConverter("en-in", this);
+function EnInConverter () {
+  numberToText.addConverter('en-in', this)
 }
 
-util.inherits(en_inConverter, numberToText.Converter);
+util.inherits(EnInConverter, numberToText.Converter)
 
+EnInConverter.prototype.convertToText = function (num, options) {
+  if (options.separator !== '') options.separator = options.separator || ','
+  if (cases.indexOf(options.case) === -1) {
+    options.case = cases[0]
+  }
+  var caseFunction = caseFunctions[cases.indexOf(options.case)]
 
-en_inConverter.prototype.convertToText = function (num, options) {
-    if (options.separator !== '')
-        options.separator = options.separator || ",";
-    if (cases.indexOf(options.case) === -1) {
-        options.case = cases[0];
-    }
-    var caseFunction = caseFunctions[cases.indexOf(options.case)];
-
-    var valueArray = [];
-    if (typeof num === "number" || num instanceof Number) {
-        num = num.toString();
-    }
-    if (num === "0") {
-        return "Zero";
-    }
-    var splittedNumbers = num.match(/.{1,}(?=(..){2}(...)$)|.{1,2}(?=(..){0,1}(...)$)|.{1,3}$/g);
-    for (var index = 0; index < splittedNumbers.length; ++index) {
-        var splitValues = [];
-        var splitNum = splittedNumbers[index];
-        if (splittedNumbers.length == 4 && index == 0 && splitNum.length > 2) {
-            splitValues.push(this.convertToText(splitNum, options));
+  var valueArray = []
+  if (typeof num === 'number' || num instanceof Number) {
+    num = num.toString()
+  }
+  if (num === '0') {
+    return 'Zero'
+  }
+  var splittedNumbers = num.match(/.{1,}(?=(..){2}(...)$)|.{1,2}(?=(..){0,1}(...)$)|.{1,3}$/g)
+  for (var index = 0; index < splittedNumbers.length; ++index) {
+    var splitValues = []
+    var splitNum = splittedNumbers[index]
+    if (splittedNumbers.length === 4 && index === 0 && splitNum.length > 2) {
+      splitValues.push(this.convertToText(splitNum, options))
+    } else {
+      if (splitNum.length === 3 && ones[splitNum.charAt(0)]) {
+        splitValues.push(ones[splitNum.charAt(0)])
+        splitValues.push('Hundred')
+      } if (splitNum.length >= 2) {
+        if (splitNum.substr(-2, 1) === '1') {
+          splitValues.push(ones[splitNum.substr(-2, 2)])
         } else {
-            if (splitNum.length === 3 && ones[splitNum.charAt(0)]) {
-                splitValues.push(ones[splitNum.charAt(0)])
-                splitValues.push('Hundred');
-            } if (splitNum.length >= 2) {
-                if (splitNum.substr(-2, 1) === '1') {
-                    splitValues.push(ones[splitNum.substr(-2, 2)]);
-                } else {
-                    if (tens[splitNum.substr(-2, 1)])
-                        splitValues.push(tens[splitNum.substr(-2, 1)]);
-                    if (ones[splitNum.substr(-1, 1)])
-                        splitValues.push(ones[splitNum.substr(-1, 1)]);
-                }
-            } else {
-                splitValues.push(ones[splitNum.charAt(0)]);
-            }
+          if (tens[splitNum.substr(-2, 1)]) {
+            splitValues.push(tens[splitNum.substr(-2, 1)])
+          }
+          if (ones[splitNum.substr(-1, 1)]) {
+            splitValues.push(ones[splitNum.substr(-1, 1)])
+          }
         }
-        if (hundreds[splittedNumbers.length - 1 - index] && splitValues.length > 0)
-            splitValues.push(hundreds[splittedNumbers.length - 1 - index]);
-        if (splitValues.length > 0)
-            valueArray.push(splitValues.join(' '));
+      } else {
+        splitValues.push(ones[splitNum.charAt(0)])
+      }
     }
-    return caseFunction.call((valueArray.join(options.separator + ' ')));
+    if (hundreds[splittedNumbers.length - 1 - index] && splitValues.length > 0) {
+      splitValues.push(hundreds[splittedNumbers.length - 1 - index])
+    }
+    if (splitValues.length > 0) {
+      valueArray.push(splitValues.join(' '))
+    }
+  }
+  return caseFunction.call((valueArray.join(options.separator + ' ')))
 }
 
-module.exports = new en_inConverter()
+module.exports = new EnInConverter()
+
 },{"../index":4,"util":9}],3:[function(require,module,exports){
-/** 
- * Convert the number to text
-*/
-var numberToText = require('../index');
-var util = require('util');
+var numberToText = require('../index')
+var util = require('util')
 
-var thousands = ["", "Thousand", "Million", "Billion", "Trillion", "Quadrillion", "Quintillion "];
-var ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eightteen", "Nineteen"];
-var tens = ["", "", "Twenty", "Thirty", "Fourty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
-var cases = ["titleCase", "lowerCase", "upperCase"]
-var caseFunctions = [String.prototype.toString, String.prototype.toLowerCase, String.prototype.toUpperCase];
+var thousands = ['', 'Thousand', 'Million', 'Billion', 'Trillion', 'Quadrillion', 'Quintillion']
+var ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eightteen', 'Nineteen']
+var tens = ['', '', 'Twenty', 'Thirty', 'Fourty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety']
+var cases = ['titleCase', 'lowerCase', 'upperCase']
+var caseFunctions = [String.prototype.toString, String.prototype.toLowerCase, String.prototype.toUpperCase]
 
-/**
- *  convert number to text
- *  @param num string or number
- *  @param options { language : "en-us" ,separator :"," ,case : "titleCase" } current support language is en-us and cases are "titleCase" , "lowerCase" , "upperCase". default is { language : "en-us" ,separator :"," ,case : "titleCase" }
- */
-function en_usConverter() {
-    numberToText.addConverter("en-us", this);
+function EnUsConverter () {
+  numberToText.addConverter('en-us', this)
 }
 
-util.inherits(en_usConverter, numberToText.Converter);
+util.inherits(EnUsConverter, numberToText.Converter)
 
+EnUsConverter.prototype.convertToText = function (num, options) {
+  options = options || {}
+  if (options.separator !== '') options.separator = options.separator || ','
+  if (cases.indexOf(options.case) === -1) {
+    options.case = cases[0]
+  }
+  var caseFunction = caseFunctions[cases.indexOf(options.case)]
 
-en_usConverter.prototype.convertToText = function (num, options) {
-    var options = options || {};
-    if (options.separator !== '')
-        options.separator = options.separator || ",";
-    if (cases.indexOf(options.case) === -1) {
-        options.case = cases[0];
-    }
-    var caseFunction = caseFunctions[cases.indexOf(options.case)];
-
-    var valueArray = [];
-    if (typeof num === "number" || num instanceof Number) {
-        num = num.toString();
-    }
-    if (num === "0") {
-        return "Zero";
-    }
-    var splittedNumbers = num.match(/.{1,}(?=(...){5}(...)$)|.{1,3}(?=(...){0,5}$)|.{1,3}$/g);
-    for (var index = 0; index < splittedNumbers.length; ++index) {
-        var splitValues = [];
-        var splitNum = splittedNumbers[index];
-        if (splitNum.length > 3) {
-            splitValues.push(module.exports.convertToText(splitNum));
+  var valueArray = []
+  if (typeof num === 'number' || num instanceof Number) {
+    num = num.toString()
+  }
+  if (num === '0') {
+    return 'Zero'
+  }
+  var splittedNumbers = num.match(/.{1,}(?=(...){5}(...)$)|.{1,3}(?=(...){0,5}$)|.{1,3}$/g)
+  for (var index = 0; index < splittedNumbers.length; ++index) {
+    var splitValues = []
+    var splitNum = splittedNumbers[index]
+    if (splitNum.length > 3) {
+      splitValues.push(module.exports.convertToText(splitNum))
+    } else {
+      if (splitNum.length === 3 && ones[splitNum.charAt(0)]) {
+        splitValues.push(ones[splitNum.charAt(0)])
+        splitValues.push('Hundred')
+      } if (splitNum.length >= 2) {
+        if (splitNum.substr(-2, 1) === '1') {
+          splitValues.push(ones[splitNum.substr(-2, 2)])
         } else {
-            if (splitNum.length === 3 && ones[splitNum.charAt(0)]) {
-                splitValues.push(ones[splitNum.charAt(0)])
-                splitValues.push('Hundred');
-            } if (splitNum.length >= 2) {
-                if (splitNum.substr(-2, 1) === '1') {
-                    splitValues.push(ones[splitNum.substr(-2, 2)]);
-                } else {
-                    if (tens[splitNum.substr(-2, 1)])
-                        splitValues.push(tens[splitNum.substr(-2, 1)]);
-                    if (ones[splitNum.substr(-1, 1)])
-                        splitValues.push(ones[splitNum.substr(-1, 1)]);
-                }
-            } else {
-                splitValues.push(ones[splitNum.charAt(0)]);
-            }
+          if (tens[splitNum.substr(-2, 1)]) {
+            splitValues.push(tens[splitNum.substr(-2, 1)])
+          }
+          if (ones[splitNum.substr(-1, 1)]) {
+            splitValues.push(ones[splitNum.substr(-1, 1)])
+          }
         }
-        if (thousands[splittedNumbers.length - 1 - index] && splitValues.length > 0)
-            splitValues.push(thousands[splittedNumbers.length - 1 - index]);
-        if (splitValues.length > 0)
-            valueArray.push(splitValues.join(' '));
+      } else {
+        splitValues.push(ones[splitNum.charAt(0)])
+      }
     }
-    return caseFunction.call((valueArray.join(options.separator + ' ')));
+    if (thousands[splittedNumbers.length - 1 - index] && splitValues.length > 0) {
+      splitValues.push(thousands[splittedNumbers.length - 1 - index])
+    }
+    if (splitValues.length > 0) {
+      valueArray.push(splitValues.join(' '))
+    }
+  }
+  return caseFunction.call((valueArray.join(options.separator + ' ')))
 }
 
-module.exports = new en_usConverter()
+module.exports = new EnUsConverter()
+
 },{"../index":4,"util":9}],4:[function(require,module,exports){
-var converter = require('./lib/converter');
-var container = {};
+var converter = require('./lib/converter')
+var container = {}
 module.exports = {
-    /**
-    *  convert number to text
-    *  @param {string or number} num
-    *  @param {object } options { language : "en-us" ,separator :"," ,case : "titleCase" } current support language is en-us and cases are "titleCase" , "lowerCase" , "upperCase". default is { language : "en-us" ,separator :"," ,case : "titleCase" }
-    */
-    convertToText: function(num, options) {
-        options = options || {};
-        var language = (options.language || "en-us").toLowerCase();
-        if (container.hasOwnProperty(language)) {
-            return container[language].convertToText(num, options);
-        } else {
-            throw new Error('converter for language "' + language + '" not found.')
-        }
-    },
+  /**
+  *  convert number to text
+  *  @param {string or number} num
+  *  @param {object } options { language : "en-us" ,separator :"," ,case : "titleCase" } current support languages en-us, en-in annd de and cases are "titleCase" , "lowerCase" , "upperCase". default is { language : "en-us" ,separator :"," ,case : "titleCase" }
+  */
+  convertToText: function (num, options) {
+    options = options || {}
+    var language = (options.language || 'en-us').toLowerCase()
+    if (container.hasOwnProperty(language)) {
+      return container[language].convertToText(num, options)
+    } else {
+      throw new Error('converter for language "' + language + '" not found.')
+    }
+  },
 
-    addConverter: function(language, langConverter) {
-        if (!container.hasOwnProperty(language)) {
-            if (langConverter instanceof converter) {
-                container[language] = langConverter;
-            } else {
-                new Error("language converter is not instance of converter");
-            }
-        } else {
-            return false;
-        }
-    },
-    Converter: converter
+  addConverter: function (language, langConverter) {
+    if (!container.hasOwnProperty(language)) {
+      if (langConverter instanceof converter) {
+        container[language] = langConverter
+      } else {
+        throw new Error('language converter is not instance of converter')
+      }
+    } else {
+      return false
+    }
+  },
+  Converter: converter
 }
 
 },{"./lib/converter":5}],5:[function(require,module,exports){
-var converter =  module.exports = function () {
-    
-}
+var converter = module.exports = function () {}
 
 converter.prototype.convertToText = function (options) {
-        new Error("convertToText is not implemented by " + this.constructor.name  + " ." );
+  throw new Error('convertToText is not implemented by ' + this.constructor.name + ' .')
 }
+
 },{}],6:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module

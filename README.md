@@ -3,8 +3,10 @@
 > `number-to-text` is a regular expression driven number to text converter (no mathematical operation used). supported languages `en-us` (US English), `en-in` (Indian English), `de` (Germany)   
 
 [![Build Status][travis-ci-img]][travis-ci-url] 
-[![npm version][npm-version-img]][npm-version-url] 
-
+[![npm version][npm-version-img]][npm-version-url]
+[![Test Coverage][coveralls-image]][coveralls-url]
+[![js-standard-style][js-standard-style-img]][js-standard-style-url] 
+ 
 [![NPM](https://nodei.co/npm/number-to-text.png?downloadRank=true&downloads=true)](https://nodei.co/npm/number-to-text/)
 ## Index
 * [Install](#install)
@@ -58,7 +60,7 @@ numberToText.convertToText("12346")
 **Examples**
 
 ```js
-var numberToText = require('number-to-text');
+var numberToText = require('number-to-text')
 require('number-to-text/converters/en-us'); // load converter
 
 numberToText.convertToText('123456')  
@@ -87,21 +89,21 @@ function is used to implement your own language converter.
 
 **writing own language converter**
 ```js
-var numberToText = require('numberToText');
-var util = require('util');
+var numberToText = require('numberToText')
+var util = require('util')
 
-function en_customConverter() { // use language code as converter prefix
+function EnCustomConverter () { // use language code as converter prefix
     numberToText.addConverter(""/*enter language name here*/, this);
 }
 
-util.inherits(en_customConverter, numberToText.Converter);
+util.inherits(EnCustomConverter, numberToText.Converter)
 
 
-en_customConverter.prototype.convertToText = function (num, options) {
+EnCustomConverter.prototype.convertToText = function (num, options) {
     /* Implement number to text conversion logic */
 }
 
-module.exports = new en_customConverter()
+module.exports = new EnCustomConverter()
 ```   
 ## Tests
 
@@ -118,3 +120,7 @@ npm test
 [travis-ci-url]: https://travis-ci.org/Maheshkumar-Kakade/number-to-text 
 [npm-version-img]: https://badge.fury.io/js/number-to-text.svg
 [npm-version-url]: http://badge.fury.io/js/number-to-text
+[coveralls-image]: https://coveralls.io/repos/github/Maheshkumar-Kakade/number-to-text/badge.svg?branch=master
+[coveralls-url]: https://coveralls.io/github/Maheshkumar-Kakade/number-to-text?branch=master
+[js-standard-style-img]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg
+[js-standard-style-url]: http://standardjs.com/

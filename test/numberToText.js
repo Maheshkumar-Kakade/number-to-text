@@ -92,15 +92,15 @@ describe('number conversion', function () {
     done()
   })
 
-  it('should convert 512345678 to Five Hundered Twelve Million, Three Hundred Fourty Five Thousand, Six Hundred Seventy Eight', function (done) {
-    numberToText.convertToText('512345678').should.equal('Five Hundred Twelve Million, Three Hundred Fourty Five Thousand, Six Hundred Seventy Eight')
-    numberToText.convertToText(512345678).should.equal('Five Hundred Twelve Million, Three Hundred Fourty Five Thousand, Six Hundred Seventy Eight')
+  it('should convert 512345678 to Five Hundered Twelve Million, Three Hundred Forty Five Thousand, Six Hundred Seventy Eight', function (done) {
+    numberToText.convertToText('512345678').should.equal('Five Hundred Twelve Million, Three Hundred Forty Five Thousand, Six Hundred Seventy Eight')
+    numberToText.convertToText(512345678).should.equal('Five Hundred Twelve Million, Three Hundred Forty Five Thousand, Six Hundred Seventy Eight')
     done()
   })
 
-  it('should convert 512345678 to Fifty One Crore, Twenty Three Lakh, Fourty Five Thousand, Six Hundred Seventy Eight for en-in language', function (done) {
-    numberToText.convertToText('512345678', { language: 'en-in' }).should.equal('Fifty One Crore, Twenty Three Lakh, Fourty Five Thousand, Six Hundred Seventy Eight')
-    numberToText.convertToText(512345678, { language: 'en-in' }).should.equal('Fifty One Crore, Twenty Three Lakh, Fourty Five Thousand, Six Hundred Seventy Eight')
+  it('should convert 512345678 to Fifty One Crore, Twenty Three Lakh, Forty Five Thousand, Six Hundred Seventy Eight for en-in language', function (done) {
+    numberToText.convertToText('512345678', { language: 'en-in' }).should.equal('Fifty One Crore, Twenty Three Lakh, Forty Five Thousand, Six Hundred Seventy Eight')
+    numberToText.convertToText(512345678, { language: 'en-in' }).should.equal('Fifty One Crore, Twenty Three Lakh, Forty Five Thousand, Six Hundred Seventy Eight')
     done()
   })
 })

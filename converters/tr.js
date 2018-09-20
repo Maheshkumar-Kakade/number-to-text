@@ -5,7 +5,7 @@ var thousands = ['', 'Bin', 'Milyon', 'Milyon', 'Trilyon', 'Katrilyon', 'Kentily
 var ones = ['', 'Bir', 'İki', 'Üç', 'Dört', 'Beş', 'Altı', 'Yedi', 'Sekiz', 'Dokuz', 'On', 'On Bir', 'On İki', 'On Üç', 'On Dört', 'On Beş', 'On Altı', 'On Yedi', 'On Sekiz', 'On Dokuz']
 var tens = ['', '', 'Yirmi', 'Otuz', 'Kırk', 'Elli', 'Altmış', 'Yetmiş', 'Seksen', 'Doksan']
 var cases = ['titleCase', 'lowerCase', 'upperCase']
-var caseFunctions = [function() { return this.toLocaleString('TR') }, function() { return this.toLocaleLowerCase('TR') }, function() { return this.toLocaleUpperCase('TR') }]
+var caseFunctions = [function () { return this.toLocaleString('TR') }, function () { return this.toLocaleLowerCase('TR') }, function () { return this.toLocaleUpperCase('TR') }]
 
 function TrConverter () {
   numberToText.addConverter('en-us', this)

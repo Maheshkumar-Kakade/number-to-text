@@ -1,6 +1,6 @@
 # number-to-text
 
-> `number-to-text` is a regular expression driven number to text converter (no mathematical operation used). supported languages `en-us` (US English), `en-in` (Indian English), `de` (Germany)   
+> `number-to-text` is a regular expression driven number to text converter (no mathematical operation used). supported languages `en-us` (US English), `en-in` (Indian English), `de` (German), `tr` (Turkish)
 
 [![Build Status][travis-ci-img]][travis-ci-url] 
 [![npm version][npm-version-img]][npm-version-url]
@@ -53,7 +53,7 @@ numberToText.convertToText("12346")
 
 * `num` - a string or number.
 * `options` 
-  - `language` - Default: `en-us` - possible Values : `en-us`, 'en-in' , 'de'
+  - `language` - Default: `en-us` - possible Values : `en-us`, 'en-in', 'de', 'tr'
   - `separator` - Default: `,` for (en-us and en-in)
   - `case` - Default: `titleCase` - possible Values : `"titleCase" , "lowerCase" , "upperCase"` for (en-us and en-in)
 

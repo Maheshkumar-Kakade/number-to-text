@@ -22,6 +22,7 @@ describe('number conversion', function () {
   it('should convert 0 to zero', function (done) {
     numberToText.convertToText('0').should.equal('Zero')
     numberToText.convertToText(0).should.equal('Zero')
+    numberToText.convertToText(0, { case: 'upperCase' }).should.equal('ZERO')
     numberToText.convertToText('0', { language: 'en-in' }).should.equal('Zero')
     done()
   })

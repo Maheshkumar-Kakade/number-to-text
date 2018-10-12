@@ -26,7 +26,7 @@ EnUsConverter.prototype.convertToText = function (num, options) {
     num = num.toString()
   }
   if (num === '0') {
-    return 'Zero'
+    return caseFunction.call('Zero')
   }
   var splittedNumbers = num.match(/.{1,}(?=(...){5}(...)$)|.{1,3}(?=(...){0,5}$)|.{1,3}$/g)
   for (var index = 0; index < splittedNumbers.length; ++index) {

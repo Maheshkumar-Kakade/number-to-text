@@ -36,9 +36,9 @@ TrConverter.prototype.convertToText = function (num, options) {
       splitValues.push(module.exports.convertToText(splitNum))
     } else {
       if (splitNum.length === 3 && ones[splitNum.charAt(0)]) {
-        const hundredNum = splitNum.charAt(0);
+        const hundredNum = splitNum.charAt(0)
         if (hundredNum > 1) {
-          splitValues.push(ones[hundredNum]);
+          splitValues.push(ones[hundredNum])
         }
         splitValues.push('Yüz')
       } if (splitNum.length >= 2) {

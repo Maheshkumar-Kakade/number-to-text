@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-var numberToText = require('../index')
+const numberToText = require('../index')
 require('../converters/en-us')
 require('../converters/en-in')
 require('should')

@@ -30,7 +30,7 @@ bower install number-to-text --save
 ### node
 
 ```js
-var numberToText = require('number-to-text')
+const numberToText = require('number-to-text')
 require('number-to-text/converters/en-us');
 
 numberToText.convertToText(12346)
@@ -60,7 +60,7 @@ numberToText.convertToText("12346")
 **Examples**
 
 ```js
-var numberToText = require('number-to-text')
+const numberToText = require('number-to-text')
 require('number-to-text/converters/en-us'); // load converter
 
 numberToText.convertToText('123456')  
@@ -89,18 +89,17 @@ function is used to implement your own language converter.
 
 **writing own language converter**
 ```js
-var numberToText = require('numberToText')
-var util = require('util')
+const numberToText = require('numberToText')
 
-function EnCustomConverter () { // use language code as converter prefix
-    numberToText.addConverter(""/*enter language name here*/, this);
-}
+class EnCustomConverter extends numberToText.Converter { // use language code as converter prefix
+    constructor () {
+        super()
+        numberToText.addConverter(""/*enter language name here*/, this);
+    }
 
-util.inherits(EnCustomConverter, numberToText.Converter)
-
-
-EnCustomConverter.prototype.convertToText = function (num, options) {
-    /* Implement number to text conversion logic */
+    convertToText (num, options) {
+        /* Implement number to text conversion logic */
+    }
 }
 
 module.exports = new EnCustomConverter()

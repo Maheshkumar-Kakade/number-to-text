@@ -2,7 +2,7 @@
  * Grunt file to load upages
  */
 module.exports = function (grunt) {
-  var watchFiles = {
+  const watchFiles = {
     serverJS: ['gruntfile.js', 'index.js']
   }
 
@@ -22,7 +22,7 @@ module.exports = function (grunt) {
     },
     browserify: {
       standalone: {
-        src: ['index.js', './converters/en-us.js', './converters/en-in.js', './converters/de.js'],
+        src: ['index.js', './converters/en-us.js', './converters/en-in.js', './converters/de.js', './converters/tr.js'],
         dest: './dist/<%= pkg.name %>.js',
         options: {
           browserifyOptions: {

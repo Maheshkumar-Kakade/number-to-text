@@ -59,7 +59,7 @@ class TrConverter extends numberToText.Converter {
           }
         }
       }
-      if (thousands[splitIndex] && (splitIndex ===1 || splitValues.length > 0)) {
+      if (thousands[splitIndex] && (splitIndex === 1 || splitValues.length > 0)) {
         splitValues.push(thousands[splitIndex])
       }
       if (splitValues.length > 0) {

@@ -1,6 +1,6 @@
 const numberToText = require('../index')
 
-const thousands = ['', 'Bin', 'Milyon', 'Milyon', 'Trilyon', 'Katrilyon', 'Kentilyon']
+const thousands = ['', 'Bin', 'Milyon', 'Milyar', 'Trilyon', 'Katrilyon', 'Kentilyon']
 const ones = ['', 'Bir', 'İki', 'Üç', 'Dört', 'Beş', 'Altı', 'Yedi', 'Sekiz', 'Dokuz', 'On', 'On Bir', 'On İki', 'On Üç', 'On Dört', 'On Beş', 'On Altı', 'On Yedi', 'On Sekiz', 'On Dokuz']
 const tens = ['', '', 'Yirmi', 'Otuz', 'Kırk', 'Elli', 'Altmış', 'Yetmiş', 'Seksen', 'Doksan']
 const cases = ['titleCase', 'lowerCase', 'upperCase']
@@ -31,6 +31,7 @@ class TrConverter extends numberToText.Converter {
     for (let index = 0; index < splittedNumbers.length; ++index) {
       const splitValues = []
       const splitNum = splittedNumbers[index]
+      const splitIndex = splittedNumbers.length - 1 - index
       if (splitNum.length > 3) {
         splitValues.push(module.exports.convertToText(splitNum))
       } else {
@@ -52,11 +53,14 @@ class TrConverter extends numberToText.Converter {
             }
           }
         } else {
-          splitValues.push(ones[splitNum.charAt(0)])
+          const oneNum = splitNum.charAt(0)
+          if (splitIndex !== 1 || oneNum > 1) {
+            splitValues.push(ones[oneNum])
+          }
         }
       }
-      if (thousands[splittedNumbers.length - 1 - index] && splitValues.length > 0) {
-        splitValues.push(thousands[splittedNumbers.length - 1 - index])
+      if (thousands[splitIndex] && (splitIndex === 1 || splitValues.length > 0)) {
+        splitValues.push(thousands[splitIndex])
       }
       if (splitValues.length > 0) {
         valueArray.push(splitValues.join(' '))

@@ -1,6 +1,6 @@
 {
   "name": "number-to-text",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "A number to text converter",
   "main": "index.js",
   "scripts": {

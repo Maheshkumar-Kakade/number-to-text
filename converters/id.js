@@ -6,7 +6,7 @@ const tens = ['', '', 'Dua Puluh', 'Tiga Puluh', 'Empat Puluh', 'Lima Puluh', 'E
 const cases = ['titleCase', 'lowerCase', 'upperCase']
 const caseFunctions = [String.prototype.toString, String.prototype.toLowerCase, String.prototype.toUpperCase]
 
-class EnUsConverter extends numberToText.Converter {
+class idConverter extends numberToText.Converter {
   constructor () {
     super()
     numberToText.addConverter('id', this)
@@ -25,7 +25,7 @@ class EnUsConverter extends numberToText.Converter {
       num = num.toString()
     }
     if (num === '0') {
-      return caseFunction.call('Zero')
+      return caseFunction.call('nol')
     }
     const splittedNumbers = num.match(/.{1,}(?=(...){5}(...)$)|.{1,3}(?=(...){0,5}$)|.{1,3}$/g)
     for (let index = 0; index < splittedNumbers.length; ++index) {
@@ -36,8 +36,8 @@ class EnUsConverter extends numberToText.Converter {
       } else {
         if (splitNum.length === 3 && ones[splitNum.charAt(0)]) {
           splitValues.push(ones[splitNum.charAt(0)])
-          splitValues.push('Hundred')
-          if(ones[splitNum.charAt(1)] || ones[splitNum.charAt(2)]) splitValues.push('And')
+          splitValues.push('Ratus')
+         // if(ones[splitNum.charAt(1)] || ones[splitNum.charAt(2)]) splitValues.push('And')
         } if (splitNum.length >= 2) {
           if (splitNum.substr(-2, 1) === '1') {
             splitValues.push(ones[splitNum.substr(-2, 2)])
@@ -64,4 +64,4 @@ class EnUsConverter extends numberToText.Converter {
   }
 }
 
-module.exports = new EnUsConverter()
+module.exports = new idConverter()

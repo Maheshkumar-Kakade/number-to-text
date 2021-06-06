@@ -9,7 +9,7 @@ const caseFunctions = [String.prototype.toString, String.prototype.toLowerCase, 
 class EnUsConverter extends numberToText.Converter {
   constructor () {
     super()
-    numberToText.addConverter('en-us', this)
+    numberToText.addConverter('id', this)
   }
 
   convertToText (num, options) {

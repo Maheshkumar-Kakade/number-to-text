@@ -6,7 +6,7 @@ const tens = ['', '', 'Dua Puluh', 'Tiga Puluh', 'Empat Puluh', 'Lima Puluh', 'E
 const cases = ['titleCase', 'lowerCase', 'upperCase']
 const caseFunctions = [String.prototype.toString, String.prototype.toLowerCase, String.prototype.toUpperCase]
 
-class idConverter extends numberToText.Converter {
+class IdConverter extends numberToText.Converter {
   constructor () {
     super()
     numberToText.addConverter('id', this)
@@ -37,7 +37,7 @@ class idConverter extends numberToText.Converter {
         if (splitNum.length === 3 && ones[splitNum.charAt(0)]) {
           splitValues.push(ones[splitNum.charAt(0)])
           splitValues.push('Ratus')
-         // if(ones[splitNum.charAt(1)] || ones[splitNum.charAt(2)]) splitValues.push('And')
+        // if(ones[splitNum.charAt(1)] || ones[splitNum.charAt(2)]) splitValues.push('And')
         } if (splitNum.length >= 2) {
           if (splitNum.substr(-2, 1) === '1') {
             splitValues.push(ones[splitNum.substr(-2, 2)])
@@ -64,4 +64,4 @@ class idConverter extends numberToText.Converter {
   }
 }
 
-module.exports = new idConverter()
+module.exports = new IdConverter()

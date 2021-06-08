@@ -6,7 +6,7 @@ const tens = ['', '', 'Dua Puluh', 'Tiga Puluh', 'Empat Puluh', 'Lima Puluh', 'E
 const cases = ['titleCase', 'lowerCase', 'upperCase']
 const caseFunctions = [String.prototype.toString, String.prototype.toLowerCase, String.prototype.toUpperCase]
 
-class idConverter extends numberToText.Converter {
+class IdConverter extends numberToText.Converter {
   constructor () {
     super()
     numberToText.addConverter('id', this)
@@ -14,7 +14,7 @@ class idConverter extends numberToText.Converter {
 
   convertToText (num, options) {
     options = options || {}
-    if (options.separator !== '') options.separator = options.separator || ','
+    if (options.separator !== '') options.separator = options.separator || ''
     if (cases.indexOf(options.case) === -1) {
       options.case = cases[0]
     }
@@ -27,6 +27,8 @@ class idConverter extends numberToText.Converter {
     if (num === '0') {
       return caseFunction.call('nol')
     }
+    if (num === '100') return caseFunction.call('Seratus')
+    if (num === '1000') return caseFunction.call('Seribu')
     const splittedNumbers = num.match(/.{1,}(?=(...){5}(...)$)|.{1,3}(?=(...){0,5}$)|.{1,3}$/g)
     for (let index = 0; index < splittedNumbers.length; ++index) {
       const splitValues = []
@@ -60,8 +62,15 @@ class idConverter extends numberToText.Converter {
         valueArray.push(splitValues.join(' '))
       }
     }
-    return caseFunction.call((valueArray.join(options.separator + ' ')))
+    let result = caseFunction.call((valueArray.join(options.separator + ' ')))
+    if (result.includes('Satu Ratus') || result.includes('satu ratus') || result.includes('SATU RATUS')) {
+      return result.replace(/Satu Ratus/i, 'Seratus')
+    }
+    if (result.includes('Satu Ribu') || result.includes('satu ribu') || result.includes('SATU RIBU')) {
+      return result.replace(/Satu Ribu/i, 'Seribu')
+    }
+    return result
   }
 }
 
-module.exports = new idConverter()
+module.exports = new IdConverter()

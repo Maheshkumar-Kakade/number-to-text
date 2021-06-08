@@ -1,6 +1,6 @@
 const numberToText = require('../index')
 
-const thousands = ['', 'Seribu', 'Juta', 'Milyar', 'Triliun']
+const thousands = ['', 'Ribu', 'Juta', 'Milyar', 'Triliun']
 const ones = ['', 'Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam', 'Tujuh', 'Delapan', 'Sembilan', 'Sepuluh', 'Sebelas', 'Dua belas', 'Tiga Belas', 'Empat Belas', 'Lima Belas', 'Enam Belas', 'Tujuh Belas', 'Delapan Belas', 'Sembilan Belas']
 const tens = ['', '', 'Dua Puluh', 'Tiga Puluh', 'Empat Puluh', 'Lima Puluh', 'Enam Puluh', 'Tujuh Puluh', 'Delapan Puluh', 'Sembilan Puluh']
 const cases = ['titleCase', 'lowerCase', 'upperCase']
@@ -14,7 +14,7 @@ class IdConverter extends numberToText.Converter {
 
   convertToText (num, options) {
     options = options || {}
-    if (options.separator !== '') options.separator = options.separator || ','
+    if (options.separator !== '') options.separator = options.separator || ''
     if (cases.indexOf(options.case) === -1) {
       options.case = cases[0]
     }
@@ -27,6 +27,8 @@ class IdConverter extends numberToText.Converter {
     if (num === '0') {
       return caseFunction.call('nol')
     }
+    if (num === '100') return caseFunction.call('Seratus')
+    if (num === '1000') return caseFunction.call('Seribu')
     const splittedNumbers = num.match(/.{1,}(?=(...){5}(...)$)|.{1,3}(?=(...){0,5}$)|.{1,3}$/g)
     for (let index = 0; index < splittedNumbers.length; ++index) {
       const splitValues = []
@@ -37,7 +39,6 @@ class IdConverter extends numberToText.Converter {
         if (splitNum.length === 3 && ones[splitNum.charAt(0)]) {
           splitValues.push(ones[splitNum.charAt(0)])
           splitValues.push('Ratus')
-        // if(ones[splitNum.charAt(1)] || ones[splitNum.charAt(2)]) splitValues.push('And')
         } if (splitNum.length >= 2) {
           if (splitNum.substr(-2, 1) === '1') {
             splitValues.push(ones[splitNum.substr(-2, 2)])
@@ -60,7 +61,14 @@ class IdConverter extends numberToText.Converter {
         valueArray.push(splitValues.join(' '))
       }
     }
-    return caseFunction.call((valueArray.join(options.separator + ' ')))
+    let result = caseFunction.call((valueArray.join(options.separator + ' ')))
+    if (result.includes('Satu Ratus') || result.includes('satu ratus') || result.includes('SATU RATUS')) {
+      return result.replace(/Satu Ratus/i, 'Seratus')
+    }
+    if (result.includes('Satu Ribu') || result.includes('satu ribu') || result.includes('SATU RIBU')) {
+      return result.replace(/Satu Ribu/i, 'Seribu')
+    }
+    return result
   }
 }
 

@@ -38,6 +38,7 @@ class EnUsConverter extends numberToText.Converter {
           splitValues.push(ones[splitNum.charAt(0)])
           splitValues.push('Hundred')
           if (ones[splitNum.charAt(1)] || ones[splitNum.charAt(2)]) splitValues.push('And')
+          // if (ones[splitNum.charAt(1)] || ones[splitNum.charAt(2)]) splitValues.push('And')
         } if (splitNum.length >= 2) {
           if (splitNum.substr(-2, 1) === '1') {
             splitValues.push(ones[splitNum.substr(-2, 2)])

@@ -9,10 +9,12 @@ class NumberToText {
   constructor () {
     this.Converter = Converter
   }
+
   convertToText (num, options) {
     options = options || {}
+
     const language = (options.language || 'en-us').toLowerCase()
-    if (container.hasOwnProperty(language)) {
+    if (Object.prototype.hasOwnProperty.call(container, language)) {
       return container[language].convertToText(num, options)
     } else {
       throw new Error('converter for language "' + language + '" not found.')
@@ -20,7 +22,7 @@ class NumberToText {
   }
 
   addConverter (language, langConverter) {
-    if (!container.hasOwnProperty(language)) {
+    if (!Object.prototype.hasOwnProperty.call(container, language)) {
       if (langConverter instanceof Converter) {
         container[language] = langConverter
       } else {

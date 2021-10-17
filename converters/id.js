@@ -61,7 +61,7 @@ class IdConverter extends numberToText.Converter {
         valueArray.push(splitValues.join(' '))
       }
     }
-    let result = caseFunction.call((valueArray.join(options.separator + ' ')))
+    const result = caseFunction.call((valueArray.join(options.separator + ' ')))
     if (result.includes('Satu Ratus') || result.includes('satu ratus') || result.includes('SATU RATUS')) {
       return result.replace(/Satu Ratus/i, 'Seratus')
     }

@@ -5,17 +5,17 @@ require('../converters/en-in')
 require('should')
 describe('number conversion', function () {
   it('should convert 123456 to One Hundred Twenty Three Thousand, Four Hundred Fifty Six', function (done) {
-    numberToText.convertToText('123456').should.equal('One Hundred Twenty Three Thousand, Four Hundred Fifty Six')
-    numberToText.convertToText(123456).should.equal('One Hundred Twenty Three Thousand, Four Hundred Fifty Six')
-    numberToText.convertToText(123456, { case: 'lowerCase' }).should.equal('one hundred twenty three thousand, four hundred fifty six')
-    numberToText.convertToText(123456, { case: 'upperCase' }).should.equal('ONE HUNDRED TWENTY THREE THOUSAND, FOUR HUNDRED FIFTY SIX')
-    numberToText.convertToText(123456, { separator: '', case: 'upperCase' }).should.equal('ONE HUNDRED TWENTY THREE THOUSAND FOUR HUNDRED FIFTY SIX')
+    numberToText.convertToText('123456').should.equal('One Hundred And Twenty Three Thousand, Four Hundred And Fifty Six')
+    numberToText.convertToText(123456).should.equal('One Hundred And Twenty Three Thousand, Four Hundred And Fifty Six')
+    numberToText.convertToText(123456, { case: 'lowerCase' }).should.equal('one hundred and twenty three thousand, four hundred and fifty six')
+    numberToText.convertToText(123456, { case: 'upperCase' }).should.equal('ONE HUNDRED AND TWENTY THREE THOUSAND, FOUR HUNDRED AND FIFTY SIX')
+    numberToText.convertToText(123456, { separator: '', case: 'upperCase' }).should.equal('ONE HUNDRED AND TWENTY THREE THOUSAND FOUR HUNDRED AND FIFTY SIX')
     done()
   })
 
   it('should convert 1234567 to One Million, Two Hundred Thirty Four Thousand, Five Hundred Sixty Seven', function (done) {
-    numberToText.convertToText('1234567').should.equal('One Million, Two Hundred Thirty Four Thousand, Five Hundred Sixty Seven')
-    numberToText.convertToText(1234567).should.equal('One Million, Two Hundred Thirty Four Thousand, Five Hundred Sixty Seven')
+    numberToText.convertToText('1234567').should.equal('One Million, Two Hundred And Thirty Four Thousand, Five Hundred And Sixty Seven')
+    numberToText.convertToText(1234567).should.equal('One Million, Two Hundred And Thirty Four Thousand, Five Hundred And Sixty Seven')
     done()
   })
 
@@ -93,9 +93,9 @@ describe('number conversion', function () {
     done()
   })
 
-  it('should convert 512345678 to Five Hundered Twelve Million, Three Hundred Forty Five Thousand, Six Hundred Seventy Eight', function (done) {
-    numberToText.convertToText('512345678').should.equal('Five Hundred Twelve Million, Three Hundred Forty Five Thousand, Six Hundred Seventy Eight')
-    numberToText.convertToText(512345678).should.equal('Five Hundred Twelve Million, Three Hundred Forty Five Thousand, Six Hundred Seventy Eight')
+  it('should convert 512345678 to Five Hundered And Twelve Million, Three Hundred And Forty Five Thousand, Six Hundred And Seventy Eight', function (done) {
+    numberToText.convertToText('512345678').should.equal('Five Hundred And Twelve Million, Three Hundred And Forty Five Thousand, Six Hundred And Seventy Eight')
+    numberToText.convertToText(512345678).should.equal('Five Hundred And Twelve Million, Three Hundred And Forty Five Thousand, Six Hundred And Seventy Eight')
     done()
   })
 

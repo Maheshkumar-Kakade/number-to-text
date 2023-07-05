@@ -13,7 +13,7 @@ class NumberToText {
   convertToText (num, options) {
     options = options || {}
 
-    const language = (options.language || 'en-us').toLowerCase()
+    const language = (options.language).toLowerCase()
     if (Object.prototype.hasOwnProperty.call(container, language)) {
       return container[language].convertToText(num, options)
     } else {

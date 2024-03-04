@@ -10,8 +10,8 @@ class NumberToText {
     this.Converter = Converter
   }
 
-  convertToText (num, options) {
-    options = options || {}
+  convertToText (num, options = {}) {
+    options.language = options.language || 'en-us'
 
     const language = (options.language).toLowerCase()
     if (Object.prototype.hasOwnProperty.call(container, language)) {

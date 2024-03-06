@@ -1,5 +1,6 @@
 const Converter = require('./lib/Converter')
 const container = {}
+const DEFAULT_LOCALE = 'en-us'
 class NumberToText {
   /**
   *  convert number to text
@@ -10,15 +11,22 @@ class NumberToText {
     this.Converter = Converter
   }
 
-  convertToText (num, options) {
-    options = options || {}
+  convertToText (num, options = {}) {
+    const registeredLanguages = Object.keys(container)
+    if (!registeredLanguages.length) {
+      throw new Error('no converters registered.')
+    }
 
-    const language = (options.language).toLowerCase()
-    if (Object.prototype.hasOwnProperty.call(container, language)) {
-      return container[language].convertToText(num, options)
-    } else {
+    if (!options.language) {
+      options.language = registeredLanguages.includes(DEFAULT_LOCALE) ? DEFAULT_LOCALE : registeredLanguages[0]
+    }
+
+    const language = options.language.toLowerCase()
+    if (!Object.prototype.hasOwnProperty.call(container, language)) {
       throw new Error('converter for language "' + language + '" not found.')
     }
+
+    return container[language].convertToText(num, options)
   }
 
   addConverter (language, langConverter) {

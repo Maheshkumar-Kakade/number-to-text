@@ -11,14 +11,21 @@ class NumberToText {
   }
 
   convertToText (num, options = {}) {
-    options.language = options.language || 'en-us'
+    const registeredLanguages = Object.keys(container)
+    if (!registeredLanguages.length) {
+      throw new Error('no converters registered.')
+    }
 
-    const language = (options.language).toLowerCase()
-    if (Object.prototype.hasOwnProperty.call(container, language)) {
-      return container[language].convertToText(num, options)
-    } else {
+    if (!options.language) {
+      options.language = registeredLanguages.includes('en-us') ? 'en-us' : registeredLanguages[0]
+    }
+
+    const language = options.language.toLowerCase()
+    if (!Object.prototype.hasOwnProperty.call(container, language)) {
       throw new Error('converter for language "' + language + '" not found.')
     }
+
+    return container[language].convertToText(num, options)
   }
 
   addConverter (language, langConverter) {

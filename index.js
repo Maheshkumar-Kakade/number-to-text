@@ -1,5 +1,6 @@
 const Converter = require('./lib/Converter')
 const container = {}
+const DEFAULT_LOCALE = 'en-us'
 class NumberToText {
   /**
   *  convert number to text
@@ -17,7 +18,7 @@ class NumberToText {
     }
 
     if (!options.language) {
-      options.language = registeredLanguages.includes('en-us') ? 'en-us' : registeredLanguages[0]
+      options.language = registeredLanguages.includes(DEFAULT_LOCALE) ? DEFAULT_LOCALE : registeredLanguages[0]
     }
 
     const language = options.language.toLowerCase()

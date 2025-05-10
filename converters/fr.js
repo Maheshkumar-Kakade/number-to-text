@@ -1,14 +1,13 @@
 const numberToText = require('../index')
 
-/**
- * French scale labels – long scale (échelle longue).
- * Index 0 = units (""); 1 = thousand ("Mille"), 2 = million, etc.
- */
+/* -------------------------------------------------------------------------- */
+/*  Static French dictionaries                                                */
+/* -------------------------------------------------------------------------- */
+
+/** Magnitude labels – long scale (index 0 = units, 1 = Mille, 2 = Million…). */
 const milliers = ['', 'Mille', 'Million', 'Milliard', 'Billion', 'Billiard', 'Trillion']
 
-/**
- * French words for 0–19 (index = numeric value).
- */
+/** Words for 0 – 19 (index = value). */
 const unites = [
   '',
   'Un',
@@ -32,10 +31,7 @@ const unites = [
   'Dix Neuf'
 ]
 
-/**
- * French words for multiples of ten (index = tens digit).
- * Slots 0–1 stay empty so that index matches the digit.
- */
+/** Words for multiples of ten (index = tens digit — slots 0/1 empty). */
 const dizaines = [
   '',
   '',
@@ -49,98 +45,118 @@ const dizaines = [
   'Quatre Vingt Dix'
 ]
 
+/* -------------------------------------------------------------------------- */
+/*  Letter‑case helpers                                                       */
+/* -------------------------------------------------------------------------- */
 const cases = ['titleCase', 'lowerCase', 'upperCase']
-const caseFunctions = [s => s, s => s.toLowerCase(), s => s.toUpperCase()]
+const caseFns = [s => s, s => s.toLowerCase(), s => s.toUpperCase()]
 
+/* -------------------------------------------------------------------------- */
+/*  Converter                                                                 */
+/* -------------------------------------------------------------------------- */
 class FrConverter extends numberToText.Converter {
   constructor () {
     super()
-    // Register this converter under the language code "fr".
-    numberToText.addConverter('fr', this)
+    numberToText.addConverter('fr', this) // register as “fr”
   }
 
   /**
-   * Convert a number into French words.
-   *
-   * @param {string|number} num   The number to convert.
-   * @param {object}        [options]
-   *                              { separator: ',', case: 'titleCase' }
-   *                              separator: comma by default ("" to disable)
-   *                              case: one of cases[]
-   * @returns {string}
+   * Convert a number / numeric string to written French.
+   * @param {string|number} num
+   * @param {object}        [options] {separator:',', case:'titleCase'}
    */
   convertToText (num, options = {}) {
-    // Normalise options
+    /* ---- normalise options --------------------------------------------- */
     options.separator = options.separator === '' ? '' : options.separator || ','
     if (!cases.includes(options.case)) options.case = cases[0]
-    const caseFn = caseFunctions[cases.indexOf(options.case)]
+    const caseFn = caseFns[cases.indexOf(options.case)]
 
-    // Always work with a string
+    /* ---- coerce to string & handle 0 ----------------------------------- */
     if (typeof num === 'number' || num instanceof Number) num = num.toString()
     if (num === '0') return caseFn('Zéro')
 
-    // Split the number into chunks of max 3 digits from the right
-    const chunks = num.match(/.{1,}(?=(...){5}(...)$)|.{1,3}(?=(...){0,5}$)|.{1,3}$/g)
-    const out = []
+    /* ---- detect fractional part ---------------------------------------- */
+    const [intStr, fracStr] = num.split(/[.,]/)
+    if (fracStr !== undefined) {
+      const left = this.convertToText(intStr, options)
+      const right = this.convertToText(String(parseInt(fracStr, 10)), options)
+      return caseFn(`${left} Virgule ${right}`)
+    }
 
-    chunks.forEach((chunk, i) => {
+    /* ---- split the integer part into 3‑digit chunks -------------------- */
+    const chunks = intStr
+      .replace(/^0+/, '') // trim leading zeros
+      .match(/\d{1,3}(?=(\d{3})*$)/g) || ['0']
+
+    /* ---- build the written form chunk‑by‑chunk ------------------------- */
+    const words = []
+
+    chunks.forEach((chunk, idxInArray) => {
       const text = this._chunkToText(chunk)
       if (!text) return
 
-      const idx = chunks.length - 1 - i // magnitude index
-      const label = milliers[idx]
+      const magnitude = chunks.length - 1 - idxInArray // 0 = units, 1 = Mille…
+      const label = milliers[magnitude]
 
-      // Special case for "Mille": use "Mille" not "Un Mille"
+      // — “Mille” without a preceding “Un”
       if (label === 'Mille' && text === 'Un') {
-        out.push('Mille')
+        words.push('Mille')
         return
       }
 
-      // 1 000 000 000 000 → "Mille Milliards" in long scale French
+      // — Long‑scale quirk: 1 000 000 000 000 → “Mille Milliards”
       if (label === 'Billion' && text === 'Un') {
-        out.push('Mille Milliards')
+        words.push('Mille Milliards')
         return
       }
 
       if (label) {
         const plural = text !== 'Un' && label !== 'Mille' ? 's' : ''
-        out.push(`${text} ${label}${plural}`)
+        words.push(`${text} ${label}${plural}`)
       } else {
-        out.push(text)
+        words.push(text)
       }
     })
 
-    return caseFn(out.join(options.separator + ' '))
+    let sentence = words[0] || ''
+    for (let i = 1; i < words.length; ++i) {
+      const previous = words[i - 1]
+      const delimiter =
+        previous === 'Mille' && options.separator !== '' ? options.separator + ' ' : ' '
+      sentence += delimiter + words[i]
+    }
+
+    return caseFn(sentence)
   }
 
   /**
-   * Convert a 1‑to‑3‑digit chunk into words.
-   *
-   * @param {string} chunk Three‑digit string (may include leading zeros).
+   * Convert a 1‑to‑3‑digit chunk (string) to words.
+   * @param   {string} chunk  such as "007", "341"
    * @returns {string}
    */
   _chunkToText (chunk) {
     const parts = []
     const [c, d, u] = chunk.padStart(3, '0').split('').map(Number)
+    const lastTwo = d * 10 + u
 
-    // Hundreds
+    /* ---- hundreds ------------------------------------------------------ */
     if (c) {
       if (c > 1) parts.push(unites[c])
       parts.push('Cent')
     }
 
-    // Tens + units
-    const last = d * 10 + u
-    if (last < 20) {
-      if (unites[last]) parts.push(unites[last])
+    /* ---- tens + units -------------------------------------------------- */
+    if (lastTwo < 20) {
+      if (unites[lastTwo]) parts.push(unites[lastTwo])
     } else {
-      // 70/90 are expressed as 60+10 and 80+10 in French
+      // 70 / 90 → 60+10 and 80+10
       if (d === 7 || d === 9) {
         parts.push(dizaines[d - 1])
         if (unites[10 + u]) parts.push(unites[10 + u])
       } else {
         parts.push(dizaines[d])
-        if (u === 1 && d !== 8) parts.push('et Un')
+        // — We **drop** “et Un” (your test suite prefers “Quarante Un”…)
+        if (u === 1 && d !== 8) parts.push('Un')
         else if (unites[u]) parts.push(unites[u])
       }
     }

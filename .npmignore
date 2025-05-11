@@ -8,3 +8,4 @@ dist/
 Gruntfile.js
 .vscode/
 coverage/
+.prettierrc

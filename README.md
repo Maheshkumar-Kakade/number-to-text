@@ -2,11 +2,11 @@
 
 > `number-to-text` is a regular expression driven number to text converter (no mathematical operation used). supported languages `en-us` (US English), `en-in` (Indian English), `de` (German), `tr` (Turkish), `id` (Indonesian)
 
-[![Build Status][travis-ci-img]][travis-ci-url] 
+[![Build Status][travis-ci-img]][travis-ci-url]
 [![npm version][npm-version-img]][npm-version-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
-[![js-standard-style][js-standard-style-img]][js-standard-style-url] 
- 
+[![js-standard-style][js-standard-style-img]][js-standard-style-url]
+
 [![NPM](https://nodei.co/npm/number-to-text.png?downloadRank=true&downloads=true)](https://nodei.co/npm/number-to-text/)
 ## Index
 * [Install](#install)
@@ -52,8 +52,8 @@ numberToText.convertToText("12346")
 **Arguments**
 
 * `num` - a string or number.
-* `options` 
-  - `language` - Default: `en-us` - possible Values : `en-us`, 'en-in', 'de', 'tr'
+* `options`
+  - `language` - Default: `en-us` - possible Values : `en-us`, 'en-in', 'de', 'tr', 'fr'
   - `separator` - Default: `,` for (en-us and en-in)
   - `case` - Default: `titleCase` - possible Values : `"titleCase" , "lowerCase" , "upperCase"` for (en-us and en-in)
 
@@ -61,21 +61,23 @@ numberToText.convertToText("12346")
 
 ```js
 const numberToText = require('number-to-text')
+// import * as numberToText from "number-to-text";
 require('number-to-text/converters/en-us'); // load converter
+// import "number-to-text/converters/en-us";
 
-numberToText.convertToText('123456')  
+numberToText.convertToText('123456')
 //One Hundred Twenty Three Thousand, Four Hundred Fifty Six
 
-numberToText.convertToText(123456) 
+numberToText.convertToText(123456)
 //One Hundred Twenty Three Thousand, Four Hundred Fifty Six
 
-numberToText.convertToText(123456,{case:"lowerCase"}) 
+numberToText.convertToText(123456, {case: "lowerCase"})
 //one hundred twenty three thousand, four hundred fifty six
 
-numberToText.convertToText(123456,{case:"upperCase"}) 
+numberToText.convertToText(123456, {case: "upperCase"})
 //ONE HUNDRED TWENTY THREE THOUSAND, FOUR HUNDRED FIFTY SIX
 
-numberToText.convertToText('123456',{separator : '', case:"upperCase"}) 
+numberToText.convertToText('123456',{separator : '', case: "upperCase"})
 //ONE HUNDRED TWENTY THREE THOUSAND FOUR HUNDRED FIFTY SIX
 
 ```
@@ -103,7 +105,7 @@ class EnCustomConverter extends numberToText.Converter { // use language code as
 }
 
 module.exports = new EnCustomConverter()
-```   
+```
 ## Tests
 
 ```js
@@ -116,7 +118,7 @@ npm test
 [license-image]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
 [license-url]: LICENSE
 [travis-ci-img]: https://travis-ci.org/Maheshkumar-Kakade/number-to-text.svg?branch=master
-[travis-ci-url]: https://travis-ci.org/Maheshkumar-Kakade/number-to-text 
+[travis-ci-url]: https://travis-ci.org/Maheshkumar-Kakade/number-to-text
 [npm-version-img]: https://badge.fury.io/js/number-to-text.svg
 [npm-version-url]: http://badge.fury.io/js/number-to-text
 [coveralls-image]: https://coveralls.io/repos/github/Maheshkumar-Kakade/number-to-text/badge.svg?branch=master

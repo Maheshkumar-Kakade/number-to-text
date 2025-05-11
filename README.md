@@ -1,6 +1,6 @@
 # number-to-text
 
-> `number-to-text` is a regular expression driven number to text converter (no mathematical operation used). supported languages `en-us` (US English), `en-in` (Indian English), `de` (German), `tr` (Turkish), `id` (Indonesian)
+> `number-to-text` is a regular expression driven number to text converter (no mathematical operation used). supported languages `en-us` (US English), `en-in` (Indian English), `de` (German), `tr` (Turkish), `id` (Indonesian), `fr` (French)
 
 [![Build Status][travis-ci-img]][travis-ci-url]
 [![npm version][npm-version-img]][npm-version-url]
